@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import ProjectContext from '../../context/projects/projectContext';
 
 const NewProject = () => {
+
+  // connect to the state with context
+  const projectContext = useContext(ProjectContext);
+  const { newProjectForm, showFormNewProject } = projectContext;
 
   const [project, setProject] = useState({
     name: '',
@@ -24,26 +29,32 @@ const NewProject = () => {
     //restart form
   }
 
+  const onClickForm = () => {
+    showFormNewProject();
+  }
+
   return (
     <>
     <button
       type="button"
       className="btn btn-block"
+      onClick={ onClickForm }
       >
         Nuevo proyecto
     </button>
 
-    <form
-      className="formulario-nuevo-proyecto"
-      onSubmit={handleSubmitProject}
-    >
-      <input
-        type="text"
-        className="input-text"
-        placeholder="Nombre del proyecto"
-        name="name"
-        onChange={handleChangeProject}
-        value={name}
+    { newProjectForm ? (
+      <form
+        className="formulario-nuevo-proyecto"
+        onSubmit={handleSubmitProject}
+        >
+        <input
+          type="text"
+          className="input-text"
+          placeholder="Nombre del proyecto"
+          name="name"
+          onChange={handleChangeProject}
+          value={name}
         />
 
         <input
@@ -51,8 +62,11 @@ const NewProject = () => {
           className="btn btn-primario btn-block"
           value="Agregar proyecto"
         />
-
-    </form>
+      </form>
+    ) :
+      null
+    }
+    
     </>
   );
 };
