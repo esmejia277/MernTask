@@ -5,7 +5,7 @@ const NewProject = () => {
 
   // connect to the state with context
   const projectContext = useContext(ProjectContext);
-  const { newProjectForm, showFormNewProject } = projectContext;
+  const { newProjectForm, showFormNewProject, addNewProject } = projectContext;
 
   const [project, setProject] = useState({
     name: '',
@@ -25,8 +25,15 @@ const NewProject = () => {
     e.preventDefault();
 
     //validate project
+    if (name.trim() === '') return
+
     //add to state
+    addNewProject(project);
+
     //restart form
+    setProject({
+      name: ''
+    });
   }
 
   const onClickForm = () => {
