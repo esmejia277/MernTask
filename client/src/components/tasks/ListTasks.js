@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Task from './Task';
 
+
+import ProjectContext from '../../context/projects/projectContext';
+
+
 const ListTasks = () => {
+
+  const projectContext = useContext(ProjectContext);
+  const { project, deleteProject } = projectContext;
+
+  // Si no hay proyecto seleccionado
+  if (!project) {
+    return <h2>Selecciona un proyecto</h2>
+  }
+
+  const [ actualProject ] = project;
 
   const tasks = [
     {name: "Elegitar plataforma", status: true},
@@ -11,7 +25,7 @@ const ListTasks = () => {
 
   return (
     <>
-      <h2>Proyecto: Tienda virtual</h2>
+      <h2>Proyecto: {actualProject.name}</h2>
       <ul className="listado-tareas">
       {tasks.length === 0 ? (
           <li className="tarea">
@@ -28,6 +42,7 @@ const ListTasks = () => {
       <button
         type="button"
         className="btn btn-eliminar"
+        onClick={ () => deleteProject(actualProject.id) }
       >
         Eliminar proyecto &times;
       </button>

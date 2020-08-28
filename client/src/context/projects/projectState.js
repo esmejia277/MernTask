@@ -5,7 +5,10 @@ import projectReducer from './projectReducer';
 import { 
   FORM_NEW_PROJECT, 
   FETCH_PROJECTS,
-  ADD_NEW_PROJECT
+  ADD_NEW_PROJECT,
+  VALIDATE_FORM_NEW_PROJECT,
+  GET_ACTUAL_PROJECT,
+  DELETE_PROJECT
 } from '../../types';
 
 
@@ -20,9 +23,9 @@ const ProjectState = props => {
   
   const initialState = {
     newProjectForm: false,
-    projects: [
-
-    ]
+    projects: [],
+    formError: false,
+    project: null
   }
   
   // Dispatch para ejecutar las acciones
@@ -42,6 +45,7 @@ const ProjectState = props => {
     })
   }
 
+  // Agregar un proyecto nuevo
   const addNewProject = project => {
     project.id = uuidv4();
     dispatch({
@@ -50,14 +54,42 @@ const ProjectState = props => {
     })
   }
 
+  // Mostrar error formulario
+  const showError = () => {
+    dispatch({
+      type: VALIDATE_FORM_NEW_PROJECT
+    })
+  }
+
+  // Seleccionar el proyecto al que el usuario dio clic
+  const getActualProject = projectId => {
+    dispatch({
+      type: GET_ACTUAL_PROJECT,
+      payload: projectId
+    })
+  }
+
+  const deleteProject = projectId => {
+    dispatch({
+      type: DELETE_PROJECT,
+      payload: projectId
+    })
+  }
+
   return (
     <projectContext.Provider
       value={{
         projects: state.projects,
         newProjectForm: state.newProjectForm,
+        formError: state.formError,
+        project: state.project,
         showFormNewProject,
         fetchProjects,
-        addNewProject
+        addNewProject,
+        showError,
+        getActualProject,
+        deleteProject
+
       }}
     >
       {props.children}

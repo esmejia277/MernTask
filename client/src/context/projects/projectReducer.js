@@ -1,7 +1,10 @@
 import { 
   FORM_NEW_PROJECT,
   FETCH_PROJECTS,
-  ADD_NEW_PROJECT
+  ADD_NEW_PROJECT,
+  VALIDATE_FORM_NEW_PROJECT,
+  GET_ACTUAL_PROJECT,
+  DELETE_PROJECT
 
 } from '../../types';
 
@@ -21,8 +24,24 @@ export default (state, action) => {
       return {
         ...state,
         projects: [ ...state.projects, action.payload],
-        newProjectForm: false
-        
+        newProjectForm: false,
+        formError: false,
+      }
+    case VALIDATE_FORM_NEW_PROJECT:
+      return {
+        ...state,
+        formError: true
+      }
+    case GET_ACTUAL_PROJECT:
+      return {
+        ...state,
+        project: state.projects.filter(project => project.id === action.payload)
+      }
+    case DELETE_PROJECT:
+      return {
+        ...state,
+        projects: state.projects.filter(project => project.id !== action.payload),
+        project: null
       }
 
     default:
