@@ -31,6 +31,7 @@ const ListTasks = () => {
         ) :
         taskProject.map( task => (
           <Task
+            key={task.id}
             task={task}
           />
         ))
