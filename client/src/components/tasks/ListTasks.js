@@ -1,14 +1,17 @@
 import React, { useContext } from 'react';
 import Task from './Task';
-
-
 import ProjectContext from '../../context/projects/projectContext';
+import TaskContext from '../../context/tasks/taskContext';
 
 
 const ListTasks = () => {
 
   const projectContext = useContext(ProjectContext);
   const { project, deleteProject } = projectContext;
+
+  const taskContext = useContext(TaskContext);
+  const { taskProject } = taskContext;
+
 
   // Si no hay proyecto seleccionado
   if (!project) {
@@ -17,22 +20,16 @@ const ListTasks = () => {
 
   const [ actualProject ] = project;
 
-  const tasks = [
-    {name: "Elegitar plataforma", status: true},
-    {name: "Elegitar colores", status: false},
-    {name: "Elegitar hosting", status: true},
-  ]
-
   return (
     <>
       <h2>Proyecto: {actualProject.name}</h2>
       <ul className="listado-tareas">
-      {tasks.length === 0 ? (
+      {taskProject.length === 0 ? (
           <li className="tarea">
             <p>No hay tareas</p>
           </li>
         ) :
-        tasks.map( task => (
+        taskProject.map( task => (
           <Task
             task={task}
           />
