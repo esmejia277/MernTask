@@ -2,7 +2,10 @@ import {
   TASK_PROJECT,
   ADD_TASK,
   VALIDATE_TASK,
-  DELETE_TASK
+  DELETE_TASK,
+  STATUS_TASK,
+  ACTUAL_TASK,
+  UPDATE_TASK
 } from '../../types';
 
 
@@ -18,7 +21,7 @@ export default (state, action) => {
     case ADD_TASK:
       return {
         ...state,
-        tasks: [...state.tasks, action.payload],
+        tasks: [action.payload, ...state.tasks],
         taskError: false,
       }
     case VALIDATE_TASK:
@@ -32,8 +35,18 @@ export default (state, action) => {
         tasks: state.tasks.filter(task => task.id !== action.payload)
 
       }
-
-    
+    case UPDATE_TASK:
+    case STATUS_TASK:
+      return {
+        ...state,
+        tasks: state.tasks.map(task => task.id === action.payload.id ? action.payload : task),
+        selectedTask: null
+      }
+    case ACTUAL_TASK:
+      return {
+        ...state,
+        selectedTask:  action.payload
+      }
     
     default:
       return state

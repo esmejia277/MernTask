@@ -9,11 +9,26 @@ const Task = ({task}) => {
   const { project } = projectContext;
   
   const taskContext = useContext(TaskContext);
-  const { deleteTask, getTasksPerProjectId } = taskContext;
+  const { deleteTask, getTasksPerProjectId, changeStatusTask, getActualTask } = taskContext;
+
+  const [actualProject] = project;
 
   const deleteATask = id => {
     deleteTask(id);
-    getTasksPerProjectId(project.id);
+    getTasksPerProjectId(actualProject.id);
+  }
+
+  const handleChangeStatusTask = task => {
+    if (task.status) {
+      task.status = false;
+    } else {
+      task.status = true;
+    }
+    changeStatusTask(task);
+  }
+
+  const selectActualTask = task => {
+    getActualTask(task);
   }
 
   return (
@@ -24,6 +39,7 @@ const Task = ({task}) => {
           <button
             type="button"
             className="completo"
+            onClick={ () => handleChangeStatusTask(task) }
           >
             Completo
           </button>
@@ -32,6 +48,8 @@ const Task = ({task}) => {
         <button
             type="button"
             className="incompleto"
+            onClick={ () => handleChangeStatusTask(task) }
+
           >
             Incompleto
           </button>
@@ -41,6 +59,7 @@ const Task = ({task}) => {
         <button 
           type="button"
           className="btn btn-primario"
+          onClick={ () => selectActualTask(task) }
         >
           Editar
         </button>

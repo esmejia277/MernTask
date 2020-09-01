@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import ProjectContext from '../../context/projects/projectContext';
 import TaskContext from '../../context/tasks/taskContext';
 
@@ -10,7 +10,17 @@ const FormTask = () => {
   const { project } = projectContext;
 
   const taskContext = useContext(TaskContext);
-  const { taskError, addNewTask, validateTask, getTasksPerProjectId } = taskContext;
+  const { taskError, addNewTask, validateTask, getTasksPerProjectId, selectedTask, updateTask } = taskContext;
+
+  useEffect(() => {
+    if (selectedTask !== null) {
+      setTask(selectedTask);
+    } else {
+      setTask({
+        name: ''
+      });
+    }
+  }, [selectedTask])
 
   const [task, setTask] = useState({
     name: ''
@@ -32,11 +42,18 @@ const FormTask = () => {
       return
     }
 
+    if (selectedTask === null) {
+      task.projectId = actualProject.id;
+      task.status = false;
+      addNewTask(task);
+    } else {
+      updateTask(task);
+
+    }
 
 
-    task.projectId = actualProject.id;
-    task.status = false;
-    addNewTask(task);
+
+    
     getTasksPerProjectId(actualProject.id);
     setTask({
       name: '',
@@ -70,11 +87,11 @@ const FormTask = () => {
         </div>
 
         <div className="contener-input">
-          <input
-            type="submit"
-            className="btn btn-primary btn-submit btn-block"
-            value="Agregar tarea"
-          />
+            <input
+              type="submit"
+              className="btn btn-primary btn-submit btn-block"
+              value={selectedTask ? "Editar tarea" : "Agregar tarea"}
+            /> 
         </div>
       </form>
       {taskError && 
