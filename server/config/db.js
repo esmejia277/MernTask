@@ -13,7 +13,7 @@ const connectDB = async () => {
     console.log('DB connected');
   } catch(error) {
     console.log(error);
-    process.exit(1); // Si hay error, detiene la app
+    process.exit(1); // If error, stop the app
   }
 }
 
