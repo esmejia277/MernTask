@@ -8,16 +8,33 @@ const auth = require('../middleware/auth');
 
 //api/projects
 router.post('/',
+  auth,
   [
     check('name', 'The name is mandatory').not().isEmpty(),
   ],
-  auth,
   projectController.createProject
 );
 
 router.get('/',
   auth,
-  projectController.createProject
+  projectController.getProjects
 );
+
+router.put('/:id',
+  auth,
+  [
+    check('name', 'The name is mandatory').not().isEmpty(),
+  ],
+  projectController.updateProject
+);
+
+router.delete('/:id',
+  auth,
+  projectController.deleteProject
+);
+
+
+
+
 
 module.exports = router;
