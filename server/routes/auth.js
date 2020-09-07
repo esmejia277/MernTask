@@ -5,7 +5,11 @@ const { check } = require('express-validator');
 
 const authController = require('../controllers/authController');
 
-// api/auth 
+// middlewares
+const auth = require('../middleware/auth');
+
+// api/auth
+// login in
 router.post('/',
   [
     check('email', 'Type a valid email').isEmail(),
@@ -13,5 +17,11 @@ router.post('/',
   ],
   authController.authUser
 );
+
+// get authenticated user
+router.get('/',
+  auth,
+  authController.authenticatedUser
+)
 
 module.exports = router;
