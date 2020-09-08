@@ -18,10 +18,31 @@ const AuthState = props => {
     token: localStorage.getItem('token'),
     authenticated: null,
     user: null,
-    message: null
+    message: null,
+    loading: true,
   }
 
   const [ state, dispatch ] = useReducer(AuthReducer, initialState);
+
+  // It returns authenticated user
+  const authenticatedUser = async () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      tokenAuth(token);
+    }
+    try {
+      const response = await axiosClient.get('/api/auth');
+      dispatch({
+        type: GET_USER,
+        payload: response.data
+      });
+    } catch(error) {
+      console.log(error);
+      dispatch({
+        type: ERROR_LOGIN
+      })
+    }
+  }
 
   const registerUser = async data => {
     try {
@@ -46,24 +67,34 @@ const AuthState = props => {
     }
   }
 
-  // It returns authenticated user
-  const authenticatedUser = async () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      tokenAuth(token);
-    }
+  
+  const login = async data => {
     try {
-      const response = await axiosClient.get('/api/auth');
+      const response = await axiosClient.post('api/auth', data);
+      console.log(response);
       dispatch({
-        type: GET_USER,
+        type: SUCCESSFULL_LOGIN,
         payload: response.data
       });
-    } catch(error) {
-      console.log(error);
+      authenticatedUser();
+      
+    } catch (error) {
+      console.log(error.response.data.msg)
+      const alert = {
+        msg: error.response.data.msg,
+        category: 'alerta-error'
+      }
       dispatch({
-        type: ERROR_LOGIN
-      })
+        type: ERROR_LOGIN,
+        payload: alert
+      });
     }
+  }
+
+  const logout = async => {
+    dispatch({
+      type: LOGOUT
+    })
   }
 
 
@@ -74,7 +105,11 @@ const AuthState = props => {
         authenticated: state.authenticated,
         user: state.user,
         message: state.message,
-        registerUser
+        loading: state.loading,
+        registerUser,
+        login,
+        authenticatedUser,
+        logout
       }}
     >
       {props.children}

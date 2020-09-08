@@ -1,13 +1,9 @@
 const User = require("../models/Users");
 const bcryptjs = require("bcryptjs");
-const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
 exports.authUser = async (req, res) => {
-  // check if there are validation errors
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
-
+  
   // extract email and password
   const { email, password } = req.body;
 
@@ -19,7 +15,9 @@ exports.authUser = async (req, res) => {
     // check password
     const correctPassword = await bcryptjs.compare(password, user.password);
 
-    if (!correctPassword) return res.status(400).json({mes: 'Wrong password'})
+    if (!correctPassword) {
+      return res.status(400).json({ msg: 'Wrong password' })
+    }
 
     //create an sign token
     const payload = {
