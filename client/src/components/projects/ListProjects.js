@@ -26,8 +26,8 @@ const ListProjects = () => {
     }
 
     fetchProjects();
+    
     // eslint-disable-next-line
-
   }, [message]);
 
 

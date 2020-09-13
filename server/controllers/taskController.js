@@ -38,8 +38,7 @@ exports.createTask = async (req, res) => {
 exports.getTasks = async (req, res) => {
   try {
     // extract project
-    const { project } = req.body;
-    console.log('project id, ', project)
+    const { project } = req.query;
 
     // check if the project already does exists
     const existsProject = await Project.findById(project);
@@ -83,8 +82,8 @@ exports.updateTask = async (req, res) => {
     }
 
     let newTask = {};
-    if (name) newTask.name = name;
-    if (status) newTask.status = status;
+    newTask.name = name;
+    newTask.status = status;
 
     // save task
 
@@ -107,7 +106,7 @@ exports.deleteTask = async (req, res) => {
 
   try {
     // extract project
-    const { project } = req.body;
+    const { project } = req.query;
 
     let task = await Task.findById(req.params.id);
     if (!task) {

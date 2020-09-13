@@ -9,12 +9,12 @@ const Task = ({task}) => {
   const { project } = projectContext;
   
   const taskContext = useContext(TaskContext);
-  const { deleteTask, getTasksPerProjectId, changeStatusTask, getActualTask } = taskContext;
+  const { deleteTask, getTasksPerProjectId, updateTask, getActualTask } = taskContext;
 
   const [actualProject] = project;
 
   const deleteATask = id => {
-    deleteTask(id);
+    deleteTask(id, actualProject._id);
     getTasksPerProjectId(actualProject.id);
   }
 
@@ -24,7 +24,7 @@ const Task = ({task}) => {
     } else {
       task.status = true;
     }
-    changeStatusTask(task);
+    updateTask(task);
   }
 
   const selectActualTask = task => {
@@ -67,7 +67,7 @@ const Task = ({task}) => {
         <button 
           type="button"
           className="btn btn-secundario"
-          onClick={() => deleteATask(task.id) }
+          onClick={() => deleteATask(task._id) }
         >
           Eliminar
         </button>
